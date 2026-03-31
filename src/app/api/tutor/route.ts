@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const { subject, topic, message, topicName } = await req.json()
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const systemPrompt = `You are Zapphi, a super friendly and patient AI tutor for Zapphira, a Grade 3 student in the Philippines. 
 

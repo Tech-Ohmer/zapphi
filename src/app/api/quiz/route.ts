@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const { subject, topic, topicName, count = 5 } = await req.json()
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const prompt = `Generate ${count} quiz questions for a Grade 3 student in the Philippines following the DepEd K-12 curriculum.
 
