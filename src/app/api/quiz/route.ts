@@ -1,13 +1,11 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
 
 export async function POST(req: Request) {
   try {
     const { subject, topic, topicName, count = 5 } = await req.json()
-
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const prompt = `Generate ${count} quiz questions for a Grade 3 student in the Philippines following the DepEd K-12 curriculum.
 
@@ -22,7 +20,7 @@ Requirements:
 - Each question must have a brief Taglish explanation of the correct answer
 - Make it educational and interesting
 
-Return ONLY valid JSON in this exact format (no markdown, no extra text):
+Return ONLY valid JSON in this exact format:
 {
   "questions": [
     {
@@ -42,12 +40,18 @@ Return ONLY valid JSON in this exact format (no markdown, no extra text):
   ]
 }`
 
-    const result = await model.generateContent(prompt)
-    const text = result.response.text().trim()
-    
-    // Clean up the response in case Gemini adds markdown
-    const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    const data = JSON.parse(cleanText)
+    const completion = await groq.chat.completions.create({
+      messages: [
+        { role: 'user', content: prompt }
+      ],
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 2000,
+      temperature: 0.5,
+      response_format: { type: 'json_object' },
+    })
+
+    const text = completion.choices[0]?.message?.content?.trim() || '{}'
+    const data = JSON.parse(text)
 
     return NextResponse.json(data)
   } catch (err: any) {

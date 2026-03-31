@@ -1,15 +1,13 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
 
 export async function POST(req: Request) {
   try {
     const { subject, topic, message, topicName } = await req.json()
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
-
-    const systemPrompt = `You are Zapphi, a super friendly and patient AI tutor for Zapphira, a Grade 3 student in the Philippines. 
+    const systemMessage = `You are Zapphi, a super friendly and patient AI tutor for Zapphira, a Grade 3 student in the Philippines.
 
 IMPORTANT RULES:
 - Speak in TAGLISH (mix of Filipino and English), like a real Filipino teacher would talk to a Grade 3 student
@@ -22,12 +20,19 @@ IMPORTANT RULES:
 - Always end with a small encouragement or a fun question to keep her engaged
 
 Subject: ${subject}
-Topic: ${topicName}
+Topic: ${topicName}`
 
-Current question from student: "${message}"`
+    const completion = await groq.chat.completions.create({
+      messages: [
+        { role: 'system', content: systemMessage },
+        { role: 'user', content: message }
+      ],
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 300,
+      temperature: 0.7,
+    })
 
-    const result = await model.generateContent(systemPrompt)
-    const response = result.response.text()
+    const response = completion.choices[0]?.message?.content || 'Hindi ko maintindihan. Try again!'
 
     return NextResponse.json({ response })
   } catch (err: any) {
