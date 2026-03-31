@@ -1,8 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zapphi ⭐ — Your Smart Learning Buddy!
 
-## Getting Started
+> An AI-powered learning app for Zapphira, Grade 3 Philippines (DepEd K-12 Curriculum)
 
-First, run the development server:
+**Built with love by:** Ohmer Sulit | **For:** Zapphira 💎 | **Cost:** $0/month
+
+## Quick Start
+
+```bash
+npm install
+cp .env.example .env.local  # Fill in Gemini API key + Supabase keys
+npm run dev
+```
+
+## Getting Started (original)
 
 ```bash
 npm run dev
