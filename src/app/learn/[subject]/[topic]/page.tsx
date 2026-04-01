@@ -39,10 +39,9 @@ export default function TopicPage() {
 
   async function startLesson(studentName: string) {
     setInitialLoading(true)
-    const intro = `Kamusta ${studentName}! Ngayon matututo tayo tungkol sa "${topic?.name}". 
-Ito ay isang napakahalagang paksa sa ${subject?.name}! 😊
-Magsimula tayo — ${topic?.description}. 
-May tanong ka ba, o gusto mong magsimula na? Ask me anything! 🌟`
+    const intro = `Hi ${studentName}! Today we are going to learn about "${topic?.name}" in ${subject?.name}! 😊
+${topic?.description}.
+Do you have any questions, or are you ready to start? Ask me anything! 🌟`
     setMessages([{ role: 'zapphi', text: intro }])
     setInitialLoading(false)
   }
@@ -66,9 +65,9 @@ May tanong ka ba, o gusto mong magsimula na? Ask me anything! 🌟`
         }),
       })
       const data = await res.json()
-      setMessages(prev => [...prev, { role: 'zapphi', text: data.response ?? 'Sorry, may problema. Try again! 😅' }])
+      setMessages(prev => [...prev, { role: 'zapphi', text: data.response ?? 'Sorry, something went wrong. Try again! 😅' }])
     } catch {
-      setMessages(prev => [...prev, { role: 'zapphi', text: 'Oops! Hindi ko marinig. Try again! 😅' }])
+      setMessages(prev => [...prev, { role: 'zapphi', text: 'Oops! Something went wrong. Try again! 😅' }])
     }
     setLoading(false)
   }
@@ -131,11 +130,11 @@ May tanong ka ba, o gusto mong magsimula na? Ask me anything! 🌟`
       <div className="px-4 pb-2">
         <div className="flex gap-2 overflow-x-auto pb-1">
           {[
-            'Paano ito?',
-            'Halimbawa naman?',
-            'Di ko gets...',
-            'Ulitin mo please?',
-            'Isa pang example!',
+            'Can you explain that?',
+            'Give me an example!',
+            "I don't understand...",
+            'Can you repeat that?',
+            'One more example!',
           ].map(q => (
             <button
               key={q}
