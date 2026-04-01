@@ -7,25 +7,19 @@ export async function POST(req: Request) {
   try {
     const { subject, topic, topicName, count = 5 } = await req.json()
 
-    const isFilipino = subject === 'filipino'
-
     const prompt = `Generate ${count} quiz questions for a Grade 3 student in the Philippines.
 
 CURRICULUM: Strictly follow the DepEd K-12 curriculum for Grade 3, school year 2026-2027.
 Subject: ${subject}
 Topic: ${topicName}
 
-LANGUAGE:
-${isFilipino
-  ? `- This is the Filipino subject. Write all questions and explanations in simple, everyday Tagalog that a Grade 3 child (age 8-9) can understand. Avoid deep or formal Tagalog.`
-  : `- Write all questions and explanations in simple, clear English only. No Tagalog or Taglish.`
-}
+LANGUAGE: Write all questions and explanations in simple, clear English ONLY. No Tagalog, no Filipino words, no Taglish. English only.
 
 REQUIREMENTS:
 - Questions must be appropriate for Grade 3 level (age 8-9)
 - Mix of question types: multiple choice (4 options), true/false
 - For multiple choice: always have exactly 4 options labeled A, B, C, D
-- Each question must have a short, simple explanation of the correct answer
+- Each question must have a short, simple English explanation of the correct answer
 - Make it educational and interesting
 
 Return ONLY valid JSON in this exact format:
